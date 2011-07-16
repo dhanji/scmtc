@@ -1,0 +1,9 @@
+; example scmtc syntax file
+
+define get
+  lambda [request response]
+    begin
+      display "handling request..."
+      display request/uri request
+      body response "OK"
+      body status 200
