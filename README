@@ -1,0 +1,7 @@
+scmtc (pronounced 'schematic')
+-----
+
+A scheming web platform.
+
+To build with maven you should first install the bundled jscheme jar to your local repository:
+mvn install:install-file -DgroupId=jscheme -DartifactId=jscheme -Dversion=7.2 -Dpackaging=jar -Dfile=jscheme-7.2.jar
