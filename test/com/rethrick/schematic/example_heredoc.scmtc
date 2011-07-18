@@ -1,7 +1,7 @@
 ; example scmtc syntax file with heredocs support
 
 define get
-  lambda [request response]
+  lambda (request response)
     begin
       display "handling request...   @{request-uri request}"
       display request/uri request

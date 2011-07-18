@@ -1,0 +1,7 @@
+; schematic example request handler
+
+define get
+  lambda (request response)
+    template:mvel response
+      record
+        "name"   ::  "Dhanji"

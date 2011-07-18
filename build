@@ -1,0 +1,5 @@
+#!/bin/bash
+# scmtc build plugin
+
+mvn assembly:single
+cp target/schematic-*-jar-with-dependencies.jar dist/schematic.jar

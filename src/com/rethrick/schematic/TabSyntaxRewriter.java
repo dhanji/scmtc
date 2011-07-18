@@ -78,8 +78,12 @@ public class TabSyntaxRewriter {
           if ("::".equals(part)) {
             part = "(";
             extraRParen = true;
+          } else if ("=>".equals(part)) {
+            part = "";  //elide hashrockets
+          } else if ("[]".equals(part)) {
+            part = "()";
           } else
-            part = part.replace("[", "(").replace("]", ")");
+            part = part.replace("[", "(list ").replace("]", ")");
         } else {
           // Interpolate strings.
           int startLerp = part.indexOf("@{");
@@ -92,7 +96,6 @@ public class TabSyntaxRewriter {
               lerps--;
             }
           }
-
         }
         lb.append(part);
         lb.append(' ');
