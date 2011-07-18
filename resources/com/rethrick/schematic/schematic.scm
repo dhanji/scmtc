@@ -27,8 +27,7 @@
 
 (define record
   (lambda ls
-    (display ls)))
-    ;(put-java-map (java.util.HashMap.) ls)))
+    (put-java-map (java.util.HashMap.) (car ls))))
 
 
 ; request discovery

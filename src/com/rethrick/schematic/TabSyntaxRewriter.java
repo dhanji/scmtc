@@ -20,7 +20,10 @@ public class TabSyntaxRewriter {
     StringBuilder builder = new StringBuilder();
 
     boolean inQuote = false;
+    boolean inList = false;
     int indentLevel = 0;
+    int parens = 0;
+    outer:
     for (int i = 0, linesSize = lines.size(); i < linesSize; i++) {
       String rawLine = lines.get(i);
       if (rawLine.isEmpty()) {
@@ -42,7 +45,6 @@ public class TabSyntaxRewriter {
       StringBuilder lb = new StringBuilder();
       int lerps = 0;
       for (String part : split) {
-        String trim = part.trim();
 
         // Close up any lerps. (has to happen up here as we may close the string partway thru.
         boolean lerpEnded = false;
@@ -82,8 +84,27 @@ public class TabSyntaxRewriter {
             part = "";  //elide hashrockets
           } else if ("[]".equals(part)) {
             part = "()";
-          } else
-            part = part.replace("[", "(list ").replace("]", ")");
+          } else if ("=>".equals(part) && inList) {
+            part = "";  // Elide hashrockets.
+          } else if (part.contains("[")) {
+            part = part.replace("[", "(list ");
+
+            lb.append(part);
+            lb.append(' ');
+            builder.append('(').append(lb.toString());
+            parens++;
+            inList = true;
+            continue outer;
+
+          } else if (part.contains("]")) {
+            part = part.replace("]", ")");
+
+            lb.append(part);
+            lb.append(' ');
+            builder.append(lb.toString());
+            inList = false;
+            continue outer;
+          }
         } else {
           // Interpolate strings.
           int startLerp = part.indexOf("@{");
@@ -106,30 +127,24 @@ public class TabSyntaxRewriter {
         continue;
       }
 
-      builder.append('(');
+      if (!inList) {
+        builder.append('(');
+        parens++;
+      }
       builder.append(lb.toString());
       if (extraRParen)
         builder.append(")");
 
       // Only close if this is the last line or there's a drop in the indent level.
       int nextLineIndentLevel = i < linesSize - 1 ? detectIndentation(lines.get(i + 1)) : 0;
-      if (nextLineIndentLevel == indentLevel)
+      if (!inList && nextLineIndentLevel == indentLevel)
         builder.append(')');
-
-      if (indentLevel > nextLineIndentLevel) {
-        int rParenCount = (nextLineIndentLevel - indentLevel) / 2;
-
-        for (int j = 0; j < rParenCount; j++) {
-          builder.append(')');
-        }
-      }
 
       builder.append(multiline ? '\n' : ' ');
     }
 
     // Close up rparens.
-    int rparens = (indentLevel / 2) + 1;
-    for (int j = 0; j < rparens; j++) {
+    for (int j = 0; j < parens; j++) {
       builder.append(')');
     }
 

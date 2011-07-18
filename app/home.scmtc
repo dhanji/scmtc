@@ -3,5 +3,8 @@
 define get
   lambda (request response)
     template:mvel response
-      record
-        "name"   ::  "Dhanji"
+      record [
+        "name" => "Dhanji"
+        "age"  => "30"
+      ]
+
