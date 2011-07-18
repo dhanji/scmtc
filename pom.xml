@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.rethrick</groupId>
-  <artifactId>schematic</artifactId>
+  <artifactId>scmtc</artifactId>
   <packaging>jar</packaging>
   <version>1.0</version>
-  <name>schematic</name>
+  <name>scmtc</name>
   <url>http://rethrick.com</url>
 
   <dependencies>
@@ -90,7 +90,7 @@
           <configuration>
               <archive>
                   <manifest>
-                      <mainClass>com.rethrick.schematic.Schematic</mainClass>
+                      <mainClass>com.rethrick.schematic.Scmtc</mainClass>
                   </manifest>
               </archive>
               <descriptorRefs>

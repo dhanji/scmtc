@@ -14,18 +14,18 @@ import java.util.concurrent.Executors;
 /**
  * @author dhanji@gmail.com (Dhanji R. Prasanna)
  */
-public class Schematic {
+public class Scmtc {
   private final HttpServerPipelineFactory pipelineFactory;
   private final Config config;
 
   @Inject
-  public Schematic(HttpServerPipelineFactory pipelineFactory, Config config) {
+  public Scmtc(HttpServerPipelineFactory pipelineFactory, Config config) {
     this.pipelineFactory = pipelineFactory;
     this.config = config;
   }
 
   public void start() throws IOException {
-    String logo = IOUtils.toString(Schematic.class.getResourceAsStream("logo"), "utf-8")
+    String logo = IOUtils.toString(Scmtc.class.getResourceAsStream("logo"), "utf-8")
         .replace("@{version}", "1.0");
     System.out.println(logo);
 
@@ -46,7 +46,7 @@ public class Schematic {
 
   public static void main(String[] args) throws IOException {
     Guice.createInjector(new OptionsModule(args).options(Config.class))
-        .getInstance(Schematic.class)
+        .getInstance(Scmtc.class)
         .start();
   }
 }
