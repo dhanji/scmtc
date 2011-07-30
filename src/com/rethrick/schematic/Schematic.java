@@ -34,7 +34,7 @@ public class Schematic {
 
     // Bind and start to accept incoming connections.
     bootstrap.bind(new InetSocketAddress(config.port()));
-    System.out.println("Schematic running on port " + config.port());
+    System.out.println("scmtc running on port " + config.port());
   }
 
   public static void main(String[] args) {
