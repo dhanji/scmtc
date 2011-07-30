@@ -1,0 +1,11 @@
+#!/bin/bash
+# scmtc build plugin
+
+mvn clean package assembly:single -DskipTests=true
+cp target/scmtc-*-jar-with-dependencies.jar dist/scmtc.jar
+cp resources/com/rethrick/schematic/hello_world.scmtc dist/home.scmtc
+cp scm dist/scm
+rm dist/scmtc.zip
+zip scmtc.zip dist/*
+mv scmtc.zip dist/
+rm dist/scm dist/home.scmtc

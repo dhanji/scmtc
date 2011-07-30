@@ -13,7 +13,22 @@
 
 ; template support
 (define template:mvel
-  (lambda (response name) (body response (com.rethrick.schematic.Tools.template name)) ))
+  (lambda (response rec) (body response
+    (com.rethrick.schematic.Tools.template
+     (string-append --file-- ".mvel") rec))))
+
+(define put-java-map
+  (lambda (j-map ls)
+    (if (null? ls)
+      j-map
+      (begin
+        (.put j-map (car ls) (cadr ls))
+        (put-java-map j-map (cddr ls))))))
+
+(define record
+  (lambda ls
+    (put-java-map (java.util.HashMap.) (car ls))))
+
 
 ; request discovery
 (define request/uri

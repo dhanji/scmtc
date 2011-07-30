@@ -2,6 +2,7 @@ package com.rethrick.schematic;
 
 import com.google.inject.Singleton;
 import jscheme.JScheme;
+import org.apache.commons.io.IOUtils;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.*;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
@@ -9,6 +10,7 @@ import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.handler.codec.http.HttpVersion;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
@@ -28,8 +30,24 @@ class SchemeRequestHandler extends SimpleChannelHandler {
     // TODO(dhanji): Make a route config file later.
     // Reload our scripts every time in development mode.
     scheme.load(new InputStreamReader(SchemeRequestHandler.class.getResourceAsStream("schematic.scm")));
-    scheme.load(TabSyntaxRewriter.rewrite(new FileReader("home.scm")));
-    scheme.call(request.getMethod().getName().toLowerCase(), request, response);
+    String name = "home";
+    scheme.eval("(define --file-- \"" + name + "\")");
+
+    // Prefer .scmtc files to regular .scm ones if they exist.
+    String script;
+    if (new File(name + ".scmtc").exists()) {
+      script = TabSyntaxRewriter.rewrite(new FileReader(name + ".scmtc"), true);
+      scheme.eval(script);
+    } else
+      scheme.load(script = IOUtils.toString(new FileReader(name + ".scm")));
+    try {
+      scheme.call(request.getMethod().getName().toLowerCase(), request, response);
+    } catch (Exception ex) {
+      response.setBody(ex.getMessage()
+          + "<br>"
+          + script
+      );
+    }
 
     // Render response!
     Channel channel = e.getChannel();
