@@ -1,0 +1,5 @@
+#!/bin/bash
+# scmtc by Dhanji R. Prasanna.
+# A scheming platform. This script is is a dev-time version of the "scm" launcher.
+
+mvn compile exec:exec -Dexec.executable="java" -Dexec.args="-classpath %classpath -Xmx2048m com.rethrick.schematic.Scmtc $*"

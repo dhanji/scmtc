@@ -1,0 +1,12 @@
+body {
+  font-family: 'Arial', sans-serif;
+  font-size: small;
+}
+
+h1 {
+  font-family: 'Open Sans Condensed', sans-serif
+}
+
+h1 span {
+  display: block;
+}
